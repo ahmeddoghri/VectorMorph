@@ -1,0 +1,7 @@
+Flask>=3.0.0
+Flask-SocketIO>=5.3.6
+Pillow>=10.2.0
+CairoSVG>=2.7.1
+numpy>=1.26.3
+eventlet>=0.35.2
+python-socketio>=5.11.0

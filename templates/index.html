@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Pickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
+    
+    <!-- JavaScript dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.6/jscolor.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.min.js"></script>
+    
+    <script>
+        jscolor.installByClassName('jscolor');
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }        
+        body {
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            background: url("/static/assets/frames.svg") no-repeat center center fixed;
+            background-size: 120%;
+            transition: background-size 0.5s ease-in-out;
+            padding: 2rem 0;
+        }
+        
+        body:hover {
+            background-size: 105%;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            font-weight: 600;
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #0078D7;
+        }
+        
+        .subtitle {
+            font-weight: 400;
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        input[type="file"],
+        input[type="number"],
+        select,
+        input[type="color"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f9f9f9;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #0078D7;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            background: #005A9E;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            background: #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            width: 0%;
+            background: #4caf50;
+            transition: width 0.3s;
+        }
+        input[type="color"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f9f9f9;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+        
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border-radius: 6px;
+        }
+        
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 6px;
+        }
+        .custom-color-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f9f9f9;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>VectorMorph</h1>
+    <h2 class="subtitle">SVG to WebP and GIF Conversions</h2>
+    
+    <div class="container">
+        <form id="upload-form" action="/convert" method="post" enctype="multipart/form-data">
+            <label>Select SVG files:</label>
+            <input type="file" name="files" accept=".svg" multiple required>
+
+            <label>Frame Duration (ms):</label>
+            <input type="number" name="duration" value="100" min="1" required>
+
+            <label>Smart Animation:</label>
+            <select id="smart_animation" name="smart_animation" onchange="toggleAnimationSettings()">
+                <option value="none">None</option>
+                <option value="blend">Blend Frames</option>
+                <option value="fade">Fade Transition</option>
+            </select>
+
+            <div id="blend_settings" style="display:none;">
+                <label>Blend Amount (0.1 - 1.0):</label>
+                <input type="number" name="blend_amount" id="blend_amount" value="0.5" step="0.1" min="0.1" max="1.0">
+            </div>
+
+            <div id="fade_settings" style="display:none;">
+                <label>Number of Fade Frames (1 - 10):</label>
+                <input type="number" name="fade_steps" id="fade_steps" value="4" min="1" max="10">
+            </div>
+
+            <label>Background Color:</label>
+            <br>
+            <input id="background_color" name="background_color" class="jscolor custom-color-input" value="rgba(255,255,255,1)">
+            <br>
+            <br>
+            <label>Output Format:</label>
+            <br>
+            <select name="output_format">
+                <option value="webp">WebP</option>
+                <option value="gif">GIF</option>
+            </select>
+
+            <button type="submit">Convert</button>
+        </form>
+
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').onsubmit = function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/convert', true);
+
+            document.body.style.transition = "background-size 3s ease-in-out";
+            document.body.style.backgroundSize = "150%";
+
+            document.querySelector('.progress-bar-container').style.display = 'block';
+            document.getElementById('progress-bar').style.width = "0%";
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.body.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send(formData);
+        };
+
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+        socket.on("progress", function(data) {
+            let progressBar = document.getElementById("progress-bar");
+            if (progressBar) {
+                progressBar.style.width = data.progress + "%";
+                if (data.completed) {
+                    progressBar.style.background = "#4caf50";
+                    document.body.style.backgroundSize = "150%";
+                }
+            }
+        });
+
+        function toggleAnimationSettings() {
+            var animationType = document.getElementById('smart_animation').value;
+            document.getElementById('blend_settings').style.display = 
+                (animationType === 'blend') ? 'block' : 'none';
+            document.getElementById('fade_settings').style.display = 
+                (animationType === 'fade') ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
