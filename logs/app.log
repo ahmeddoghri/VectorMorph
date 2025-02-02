@@ -1,1 +1,5 @@
 2025-02-01 19:09:56,869 - ERROR - Conversion error: name 'url_for' is not defined
+2025-02-02 14:20:09,253 - ERROR - Download error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-02-02 14:20:09,301 - ERROR - Error converting file to base64: [Errno 2] No such file or directory: '/var/folders/qy/5hb8fk7159dbjmkxklmkk_mc0000gn/T/tmp0d45bo3n/nonexistent.txt'
+2025-02-02 14:21:42,847 - ERROR - Download error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-02-02 14:21:42,852 - ERROR - Error converting file to base64: [Errno 2] No such file or directory: '/var/folders/qy/5hb8fk7159dbjmkxklmkk_mc0000gn/T/tmpqpe_xkhn/nonexistent.txt'
