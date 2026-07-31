@@ -7,3 +7,8 @@ __pycache__/
 logs/*.log
 static/converted/*
 !static/converted/.gitkeep
+# Virtualenvs and build artifacts
+.venv/
+venv/
+*.egg-info/
+.coverage

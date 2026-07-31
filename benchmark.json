@@ -1,0 +1,68 @@
+{
+  "config": {
+    "steps": 16,
+    "samples": 64,
+    "pairs": 4
+  },
+  "pairs": [
+    {
+      "pair": "circle_to_star",
+      "naive": {
+        "travel": 53.5453,
+        "crossings": 50,
+        "area_jerk": 0.22178
+      },
+      "aligned": {
+        "travel": 14.7696,
+        "crossings": 0,
+        "area_jerk": 0.00058
+      }
+    },
+    {
+      "pair": "heart_to_squircle",
+      "naive": {
+        "travel": 87.6698,
+        "crossings": 21,
+        "area_jerk": 0.3151
+      },
+      "aligned": {
+        "travel": 14.0641,
+        "crossings": 0,
+        "area_jerk": 0.00309
+      }
+    },
+    {
+      "pair": "star_to_squircle",
+      "naive": {
+        "travel": 26.5309,
+        "crossings": 0,
+        "area_jerk": 0.00142
+      },
+      "aligned": {
+        "travel": 18.052,
+        "crossings": 0,
+        "area_jerk": 0.00237
+      }
+    },
+    {
+      "pair": "circle_to_heart",
+      "naive": {
+        "travel": 56.005,
+        "crossings": 12,
+        "area_jerk": 0.24388
+      },
+      "aligned": {
+        "travel": 11.9274,
+        "crossings": 0,
+        "area_jerk": 0.00274
+      }
+    }
+  ],
+  "totals": {
+    "naive_crossings": 83,
+    "aligned_crossings": 0,
+    "naive_travel": 223.751,
+    "aligned_travel": 58.8131,
+    "travel_reduction_pct": 73.7
+  }
+}

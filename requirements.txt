@@ -1,7 +1,9 @@
+# Web studio plus rasterized exports. The morph engine and the animated-SVG
+# export need only defusedxml, so `pip install defusedxml` is enough for
+# library or CLI use that stays in vector space.
 Flask>=3.0.0
 Flask-SocketIO>=5.3.6
 Pillow>=10.2.0
 CairoSVG>=2.7.1
-numpy>=1.26.3
-eventlet>=0.35.2
+defusedxml>=0.7.1
 python-socketio>=5.11.0
