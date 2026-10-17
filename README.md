@@ -1,5 +1,9 @@
 # VectorMorph
 
+[![tests](https://github.com/ahmeddoghri/VectorMorph/actions/workflows/tests.yml/badge.svg)](https://github.com/ahmeddoghri/VectorMorph/actions/workflows/tests.yml) [![case study](https://img.shields.io/badge/case%20study-adoghri.com-e0703e)](https://adoghri.com/project-1.html)
+
+![VectorMorph](docs/cover.jpg)
+
 Turn one SVG shape into another, and export the result as a real animated SVG.
 
 Most "SVG morph" tools hand you a video of a morph. This one keeps the output a
