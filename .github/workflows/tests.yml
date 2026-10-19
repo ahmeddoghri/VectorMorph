@@ -16,17 +16,51 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.11', '3.13']
+        python: ['3.10', '3.11', '3.12', '3.13']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
+      - name: Install system dependencies (CairoSVG needs libcairo)
+        run: sudo apt-get update && sudo apt-get install -y libcairo2
       - name: Install
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev]" || pip install -e .
-          pip install -r requirements.txt
-          pip install pytest
+          pip install -e ".[dev]"
       - name: Test
         run: python -m pytest -q
+
+  engine-only:
+    # The morph engine and animated-SVG export must work with no libcairo and
+    # no Pillow, so the library stays usable as a pure-Python dependency.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install the engine alone
+        run: pip install defusedxml
+      - name: Morph without any raster dependency
+        run: |
+          python -m vectormorph.cli morph examples/circle.svg examples/star.svg -o /tmp/out.svg
+          python -m vectormorph.cli inspect examples/heart.svg
+          test -s /tmp/out.svg
+
+  benchmark:
+    # The committed benchmark.json must match what the code actually produces.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install the engine
+        run: pip install defusedxml
+      - name: Regenerate and diff the benchmark artifact
+        run: |
+          python -m vectormorph.bench --json /tmp/benchmark.json
+          diff -u benchmark.json /tmp/benchmark.json
